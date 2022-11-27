@@ -10,7 +10,6 @@ const helmet = require('helmet');
 require('express-async-errors');
 const { NOT_FOUND } = require('http-status-codes');
 
-const url = require('url');
 const proxy = require('express-http-proxy');
 const { STATIC_FILES_URL } = require('./common/config');
 
@@ -34,10 +33,7 @@ app.use(helmet());
 app.use(cors());
 app.use(express.json());
 
-
-const staticProxy = proxy(STATIC_FILES_URL, {
-    proxyReqPathResolver: req => url.parse(req.baseUrl).path
-});
+const staticProxy = proxy(STATIC_FILES_URL);
 
 app.use('/files', staticProxy);
 
