@@ -37,6 +37,7 @@ const staticProxy = proxy(STATIC_FILES_URL, {
   proxyReqPathResolver: req => {
     const proxyParts = STATIC_FILES_URL.split('/');
     console.log(req.url);
+    console.log(proxyParts.slice(1).join('/') + req.url);
     return proxyParts.slice(1).join('/') + req.url;
   }
 });
