@@ -33,7 +33,12 @@ app.use(helmet());
 app.use(cors());
 app.use(express.json());
 
-const staticProxy = proxy(STATIC_FILES_URL);
+const staticProxy = proxy(STATIC_FILES_URL, {
+  proxyReqPathResolver: req => {
+    console.log(req);
+    return req.url;
+  }
+});
 
 app.use('/files/*', staticProxy);
 
