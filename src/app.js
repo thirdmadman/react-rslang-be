@@ -10,6 +10,10 @@ const helmet = require('helmet');
 require('express-async-errors');
 const { NOT_FOUND } = require('http-status-codes');
 
+const url = require('url');
+const proxy = require('express-http-proxy');
+const { STATIC_FILES_URL } = require('./common/config');
+
 const winston = require('./common/logging');
 const wordRouter = require('./resources/words/word.router');
 const signinRouter = require('./resources/authentication/signin.router');
@@ -30,7 +34,12 @@ app.use(helmet());
 app.use(cors());
 app.use(express.json());
 
-app.use('/files', express.static(path.join(__dirname, '../files')));
+
+const staticProxy = proxy(STATIC_FILES_URL, {
+    proxyReqPathResolver: req => url.parse(req.baseUrl).path
+});
+
+app.use('/files', staticProxy);
 
 app.use(checkAuthentication);
 
