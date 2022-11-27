@@ -35,7 +35,7 @@ app.use(express.json());
 
 const staticProxy = proxy(STATIC_FILES_URL);
 
-app.use('/files', staticProxy);
+app.use('/files/*', staticProxy);
 
 app.use(checkAuthentication);
 
