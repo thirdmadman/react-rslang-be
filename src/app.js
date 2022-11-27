@@ -35,12 +35,13 @@ app.use(express.json());
 
 const staticProxy = proxy(STATIC_FILES_URL, {
   proxyReqPathResolver: req => {
-    console.log(req);
-    return req.url;
+    const proxyParts = STATIC_FILES_URL.split('/');
+    console.log(req.url);
+    return proxyParts.slice(1).join('/') + req.url;
   }
 });
 
-app.use('/files/*', staticProxy);
+app.use('/files', staticProxy);
 
 app.use(checkAuthentication);
 
