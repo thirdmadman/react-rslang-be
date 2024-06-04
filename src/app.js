@@ -35,10 +35,11 @@ app.use(express.json());
 
 const staticProxy = proxy(STATIC_FILES_URL, {
   proxyReqPathResolver: req => {
-    const proxyParts = STATIC_FILES_URL.split('/');
-    console.log(req.url);
-    console.log(proxyParts.slice(1).join('/') + req.url);
-    return proxyParts.slice(1).join('/') + req.url;
+    console.log('Asked for >> ', req.url);
+    const resultUrl = STATIC_FILES_URL + req.url;
+
+    console.log('Redirecting content from << ', resultUrl);
+    return resultUrl;
   }
 });
 
