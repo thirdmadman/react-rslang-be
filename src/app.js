@@ -35,9 +35,13 @@ app.use(express.json());
 
 const staticProxy = proxy(STATIC_FILES_URL, {
   userResHeaderDecorator: (headers) => {
+    delete headers['cross-origin-resource-policy'];
+    delete headers['cross-origin-embedder-policy'];
+    delete headers['cross-origin-opener-policy'];
     headers['Access-Control-Allow-Origin'] = '*';
     headers['Access-Control-Allow-Methods'] = 'GET,HEAD,PUT,PATCH,POST,DELETE';
     headers['Access-Control-Allow-Headers'] = 'Content-Type, Authorization';
+    headers['Cross-Origin-Resource-Policy'] = 'cross-origin';
     return headers;
   },
   proxyReqPathResolver: (req) => {
