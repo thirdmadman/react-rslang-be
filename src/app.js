@@ -34,13 +34,16 @@ app.use(cors());
 app.use(express.json());
 
 const staticProxy = proxy(STATIC_FILES_URL, {
-  proxyReqPathResolver: req => {
-    console.log('Asked for >> ', req.url);
+  userResHeaderDecorator: (headers) => {
+    headers['Access-Control-Allow-Origin'] = '*';
+    headers['Access-Control-Allow-Methods'] = 'GET,HEAD,PUT,PATCH,POST,DELETE';
+    headers['Access-Control-Allow-Headers'] = 'Content-Type, Authorization';
+    return headers;
+  },
+  proxyReqPathResolver: (req) => {
     const resultUrl = STATIC_FILES_URL + req.url;
-
-    console.log('Redirecting content from << ', resultUrl);
     return resultUrl;
-  }
+  },
 });
 
 app.use('/files', staticProxy);
@@ -61,9 +64,9 @@ app.use(
   morgan(
     ':method :status :url :userId size req :req[content-length] res :res[content-length] - :response-time ms',
     {
-      stream: winston.stream
-    }
-  )
+      stream: winston.stream,
+    },
+  ),
 );
 
 app.use('/words', wordRouter);
